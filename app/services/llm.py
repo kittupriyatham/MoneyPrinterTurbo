@@ -11,7 +11,7 @@ from openai.types.chat import ChatCompletion
 from app.config import config
 
 _max_retries = 5
-_DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
+_DEFAULT_GEMINI_MODEL = "gemini-2.5-pro"
 _DEPRECATED_GEMINI_MODELS = {"gemini-pro", "gemini-1.0-pro"}
 MIN_SCRIPT_PARAGRAPH_NUMBER = 1
 MAX_SCRIPT_PARAGRAPH_NUMBER = 10
@@ -299,7 +299,7 @@ def _generate_response(prompt: str) -> str:
                     "temperature": 0.5,
                     "top_p": 1,
                     "top_k": 1,
-                    "max_output_tokens": 2048,
+                    "max_output_tokens": 8192,
                 }
 
                 safety_settings = [
