@@ -724,6 +724,38 @@ with left_panel:
             else:
                 params.custom_system_prompt = ""
 
+        # Show current prompt/context length (characters and approximate tokens)
+        try:
+            current_prompt = llm.build_script_prompt(
+                video_subject=params.video_subject,
+                language=params.video_language,
+                paragraph_number=params.paragraph_number,
+                video_script_prompt=params.video_script_prompt,
+                custom_system_prompt=params.custom_system_prompt,
+            )
+            prompt_chars = len(current_prompt or "")
+            # rough token estimate: average 4 characters per token
+            approx_tokens = (prompt_chars + 3) // 4
+            model_limit = None
+            try:
+                model_limit = llm.get_model_max_output_tokens()
+            except Exception:
+                model_limit = None
+
+            if model_limit:
+                st.caption(
+                    tr("Current prompt length:")
+                    + f" {prompt_chars} chars (~{approx_tokens} tokens) — model max_output_tokens: {model_limit}"
+                )
+            else:
+                st.caption(
+                    tr("Current prompt length:")
+                    + f" {prompt_chars} chars (~{approx_tokens} tokens)"
+                )
+        except Exception:
+            # safe fallback: don't break UI if token calculation fails
+            pass
+
         if st.button(
             tr("Generate Video Script and Keywords"), key="auto_generate_script"
         ):

@@ -38,6 +38,21 @@ Generate a script for a video, depending on the subject of the video.
 """.strip()
 
 
+# Known provider-specific max output token limits (used for UI hints)
+_MODEL_MAX_OUTPUT_TOKENS: dict[str, int] = {
+    "gemini": 8192,
+}
+
+
+def get_model_max_output_tokens(provider: str | None = None) -> int | None:
+    """Return a known max output token limit for the given provider.
+
+    This is a best-effort hint for UI display. Returns None if unknown.
+    """
+    prov = (provider or config.app.get("llm_provider", "")).lower()
+    return _MODEL_MAX_OUTPUT_TOKENS.get(prov)
+
+
 def _normalize_text_response(content, llm_provider: str) -> str:
     # 不同 LLM SDK 在异常或被拦截场景下，可能返回 None、空字符串，
     # 甚至返回非字符串对象。这里统一做兜底校验，避免后续直接调用
