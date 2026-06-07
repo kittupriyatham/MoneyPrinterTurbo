@@ -100,6 +100,7 @@ class VideoParams(BaseModel):
     font_name: Optional[str] = "STHeitiMedium.ttc"
     text_fore_color: Optional[str] = "#FFFFFF"
     text_background_color: Union[bool, str] = True
+    rounded_subtitle_background: bool = False
 
     font_size: int = 60
     stroke_color: Optional[str] = "#000000"
@@ -123,6 +124,7 @@ class SubtitleRequest(BaseModel):
     font_name: Optional[str] = "STHeitiMedium.ttc"
     text_fore_color: Optional[str] = "#FFFFFF"
     text_background_color: Union[bool, str] = True
+    rounded_subtitle_background: bool = False
     font_size: int = 60
     stroke_color: Optional[str] = "#000000"
     stroke_width: float = 1.5
@@ -176,6 +178,22 @@ class VideoTermsParams:
     amount: Optional[int] = 5
 
 
+class VideoSocialMetadataParams:
+    """
+    {
+      "video_subject": "A day in Shanghai",
+      "video_script": "",
+      "language": "auto",
+      "platform": "tiktok"
+    }
+    """
+
+    video_subject: Optional[str] = Field(default="A day in Shanghai", max_length=500)
+    video_script: Optional[str] = Field(default="", max_length=8000)
+    language: Optional[str] = Field(default="auto", max_length=64)
+    platform: Optional[str] = Field(default="tiktok", max_length=64)
+
+
 class BaseResponse(BaseModel):
     status: int = 200
     message: Optional[str] = "success"
@@ -195,6 +213,10 @@ class VideoScriptRequest(VideoScriptParams, BaseModel):
 
 
 class VideoTermsRequest(VideoTermsParams, BaseModel):
+    pass
+
+
+class VideoSocialMetadataRequest(VideoSocialMetadataParams, BaseModel):
     pass
 
 
@@ -278,6 +300,21 @@ class VideoTermsResponse(BaseResponse):
                 "status": 200,
                 "message": "success",
                 "data": {"video_terms": ["sky", "tree"]},
+            },
+        }
+
+
+class VideoSocialMetadataResponse(BaseResponse):
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "status": 200,
+                "message": "success",
+                "data": {
+                    "title": "A Day in Shanghai You Should Not Miss",
+                    "caption": "Save this quick Shanghai inspiration and follow for more short travel ideas.",
+                    "hashtags": ["#shorts", "#travel", "#shanghai", "#viral", "#fyp"],
+                },
             },
         }
 
