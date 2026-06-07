@@ -358,7 +358,7 @@ def _generate_response(prompt: str) -> str:
                     "temperature": 0.5,
                     "top_p": 1,
                     "top_k": 1,
-                    "max_output_tokens": 2048,
+                    "max_output_tokens": 8192,
                 }
 
                 safety_settings = [
